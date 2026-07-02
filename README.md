@@ -1,6 +1,6 @@
 # Chat Bot UI
 
-![screencapture.png](screencapture.png)
+![screencapture.png](public/screencapture.png)
 
 A mock AI chat interface built with React, TypeScript, and Vite: no
 network calls, no real model. A fake "bot" (`src/mockBot.ts`) returns
