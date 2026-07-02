@@ -1,3 +1,6 @@
+:root {
+  --font-size: clamp(1rem, 2.5vw, 2rem);
+}
 /* --- Reset: strip browser defaults, no visual styling added --- */
 *,
 *::before,
@@ -5,6 +8,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-size: var(--font-size);
 }
 
 html,
@@ -19,7 +23,8 @@ ol {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
   color: inherit;
 }
@@ -96,8 +101,27 @@ body {
   font-size: 0.75rem;
 }
 
+/* Chat bubbles — the one deliberately decorative addition in this file
+   (background/radius/padding/shadow). Colors are flat and light enough
+   to keep the default (black) text at a high contrast ratio; nothing
+   else about the reset/layout approach elsewhere in this file changes.
+   The shadow is small and low-opacity on purpose: just enough to read
+   as "raised above the page" without looking like a heavy drop shadow. */
 .message__text {
   white-space: pre-wrap;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.message--user .message__text {
+  background: #d8e8ff;
+  border-bottom-right-radius: 0.25rem;
+}
+
+.message--bot .message__text {
+  background: #e9e9ec;
+  border-bottom-left-radius: 0.25rem;
 }
 
 .message__text--thinking {
@@ -128,6 +152,17 @@ body {
   padding-inline: 0.75rem;
 }
 
+/* field-sizing: content makes the textarea grow with its own text — no
+   scrollHeight measuring, no resize listener. resize:none removes the
+   native drag-handle (redundant once sizing is automatic); max-height +
+   overflow-y cap the growth instead of letting it grow indefinitely.
+   Support: current Chrome/Edge; browsers without it just get a fixed
+   one-row textarea, which still works, it simply doesn't grow. */
 .composer__input {
   flex: 1 1 auto;
+  padding-block: 0.5rem;
+  field-sizing: content;
+  max-height: 10rem;
+  overflow-y: auto;
+  resize: none;
 }

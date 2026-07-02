@@ -5,7 +5,7 @@ export default function App() {
   const { messages, botPhase, sendMessage } = useChat();
   const [draft, setDraft] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const wasBusyRef = useRef(false);
 
   // Auto-scroll to the newest message whenever the list changes, or while
@@ -28,11 +28,25 @@ export default function App() {
     }
   }, [botPhase]);
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function submitDraft() {
     if (!draft.trim()) return;
     sendMessage(draft);
     setDraft("");
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    submitDraft();
+  }
+
+  // Multi-line fields don't submit on Enter by default (that's how you get
+  // a newline) — Enter submits, Shift+Enter inserts a newline, matching the
+  // convention most chat inputs use once they grow past one line.
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitDraft();
+    }
   }
 
   // A single, complete announcement per bot turn for assistive tech: once
@@ -84,12 +98,14 @@ export default function App() {
         <label htmlFor="composer-input" className="sr-only">
           Message
         </label>
-        <input
+        <textarea
           id="composer-input"
           ref={inputRef}
           className="composer__input"
+          rows={1}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder="Type a message"
           disabled={botPhase !== "idle"}
           autoFocus

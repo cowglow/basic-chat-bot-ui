@@ -145,10 +145,15 @@ simplification that makes a chat UI feel worse than it needs to.
 
 What this proves: a chat UI's core *legibility* — who said what, in
 what order, what's scrollable, what's pinned to the bottom — is a
-layout problem, solvable with flexbox alone. Sender is communicated
-purely by `align-self: flex-start` vs `flex-end`. Color, avatars,
-bubble shapes, and fonts are a second, separable layer you can add
-later once the structure is right.
+layout problem, solvable with flexbox alone, *before any color exists*.
+Sender was originally communicated purely by `align-self: flex-start`
+vs `flex-end`; bubble backgrounds (`.message__text`,
+`.message--user`/`.message--bot`) were added afterward, once that
+structure already worked without them. That's the point of doing it in
+this order: color/radius/avatars are additive polish on a layout that's
+already correct, not something the layout depends on to make sense —
+try it yourself by commenting out the `background` declarations, the
+conversation is still perfectly readable.
 
 Key CSS mechanism worth studying on its own: `flex-direction: column`
 on `.messages` plus `flex: 1 1 auto` plus `overflow-y: auto` on the
