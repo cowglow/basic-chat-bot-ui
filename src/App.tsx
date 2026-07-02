@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "./chat/useChat";
+import ReadmeButton from "./ReadmeButton";
+
+const REPO_URL = "https://github.com/cowglow/basic-chat-bot-ui";
 
 export default function App() {
   const { messages, botPhase, sendMessage } = useChat();
@@ -65,6 +68,16 @@ export default function App() {
 
   return (
     <main className="chat">
+      <header className="chat__header">
+        <h1>Basic Chat Bot UI</h1>
+        <nav className="chat__header-links" aria-label="Project links">
+          <ReadmeButton />
+          <a href={REPO_URL} target="_blank" rel="noreferrer">
+            Repo
+          </a>
+        </nav>
+      </header>
+
       <div className="messages" aria-label="Conversation">
         {messages.map((m) => (
           <div key={m.id} className={`message message--${m.role}`}>

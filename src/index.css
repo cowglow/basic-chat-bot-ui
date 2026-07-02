@@ -71,6 +71,21 @@ body {
   margin-inline: auto;
 }
 
+.chat__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid;
+}
+
+.chat__header-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .messages {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -165,4 +180,75 @@ body {
   max-height: 10rem;
   overflow-y: auto;
   resize: none;
+}
+
+/* The README dialog: sized/scrollable layout only, relying on the
+   browser's default <dialog> chrome (border, centering, ::backdrop dim)
+   rather than restyling it. Author styles override the UA stylesheet's
+   `dialog:not([open]) { display: none }` regardless of specificity, so
+   `display: flex` must stay scoped to `[open]` — otherwise the dialog
+   never actually hides, it just renders inline wherever it's mounted. */
+.readme-dialog {
+  width: min(40rem, 90vw);
+  max-height: 80vh;
+  padding: 1.5rem;
+  /* The browser centers a modal <dialog> via `margin: auto` (combined with
+     the UA's `:modal { inset-block: 0 }`) — our own reset's `* { margin: 0 }`
+     above zeroes that out, so it has to be restored explicitly here. */
+  margin: auto;
+}
+
+.readme-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.readme-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.readme-dialog__body {
+  overflow-y: auto;
+}
+
+/* Minimal typographic structure for the rendered Markdown — legibility, not
+   decoration: restores the list bullets/indentation and heading emphasis
+   the global reset strips, and sets code to a monospace font so inline code
+   and code blocks read as code rather than prose. */
+.readme-dialog__body :is(h1, h2, h3) {
+  font-weight: bold;
+  margin-block: 1rem 0.5rem;
+}
+
+.readme-dialog__body :is(p, pre, ul, ol) {
+  margin-block-end: 1rem;
+}
+
+.readme-dialog__body ul {
+  list-style: disc;
+  padding-inline-start: 1.5rem;
+}
+
+.readme-dialog__body ol {
+  list-style: decimal;
+  padding-inline-start: 1.5rem;
+}
+
+.readme-dialog__body :is(code, pre) {
+  font-family: ui-monospace, monospace;
+}
+
+.readme-dialog__body pre {
+  overflow-x: auto;
+}
+
+/* Constrain the README's screenshot to the dialog's width instead of
+   overflowing it at native resolution. */
+.readme-dialog__body img {
+  max-width: 100%;
+  height: auto;
 }
